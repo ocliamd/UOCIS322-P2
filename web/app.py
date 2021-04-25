@@ -2,20 +2,20 @@
 Liam Dauphinee's Flask API.
 """
 
-from flask import Flask, render_template, send_from_directory, request, abort
+from flask import Flask, render_template, send_from_directory, abort
+import config    # Configure from .ini files and command line
 
 app = Flask(__name__)
 
 @app.route("/<path:f_name>")
 def send_file(f_name):
     symbols_403 = ['~', '..', '//']
-    if (symbols_403[0] in f_name) or (symbols_403[1] in f_name) or (symbols_403[2] in f_name):
-        abort(403)
-    else:
-       try:
-           return send_from_directory('pages', f_name), 200
-       except:
-           abort(404)
+    options = config.configuration()
+    path = options.DOCROOT  # path points to DOCROOT in credential.ini
+    for s in symbols_403:
+        if s in f_name:
+            abort(403)
+    return send_from_directory(path, f_name)
 
 
 @app.errorhandler(404)
