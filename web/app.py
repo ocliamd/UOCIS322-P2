@@ -2,35 +2,21 @@
 Liam Dauphinee's Flask API.
 """
 
-from flask import Flask, render_template, send_from_directory, request
+from flask import Flask, render_template, send_from_directory, request, abort
 
 app = Flask(__name__)
 
-@app.route("/trivia")
-def send_file():
-    #return redirect(url_for('forbidden'))
-    return send_from_directory('pages', 'trivia.css'), 200
-    return send_from_directory('pages', 'trivia.html'), 200
-    '''if __name__ == '/trivia.html':
-        print("True *****")
-        return send_from_directory('pages', 'trivia.html'), 200
+@app.route("/<path:f_name>")
+def send_file(f_name):
+    symbols_403 = ['~', '..', '//']
+    if (symbols_403[0] in f_name) or (symbols_403[1] in f_name) or (symbols_403[2] in f_name):
+        abort(403)
     else:
-        print('False')
-        return "No input file specified"'''
+       try:
+           return send_from_directory('pages', f_name), 200
+       except:
+           abort(404)
 
-
-    '''if 'filename' in request.args:
-        myfilename = request.args.get('filename')
-        return send_from_directory('pages', name), 200
-    else:
-        print('')
-        return "No input file specified"'''
-
-    #if ('//' in parts[1]) or ('~' in parts[1]) or ('..' in parts[1]):
-    # check for forbidden characters
-
-    #return "UOCIS docker demo - test using PORT from app.ini!\n"
-    #return send_from_directory(path, 'trivia.html'), 200
 
 @app.errorhandler(404)
 def not_found(error):
