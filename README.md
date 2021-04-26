@@ -2,7 +2,7 @@
 
 A "getting started with Docker" project for CIS 322, Introduction to Software Engineering, at the University of Oregon.
 
-* Basic project that demonstrates the basics when using flask and docker. 
+* Basic project that demonstrates the basics of using flask and docker. 
 
 ## Basic Docker commands
 
